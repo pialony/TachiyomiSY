@@ -173,6 +173,38 @@ private fun ColumnScope.PagerViewerSettings(screenModel: ReaderSettingsScreenMod
             )
         }
     }
+
+    // Image margins
+    val pagerMarginHorizontal by screenModel.preferences.pagerMarginHorizontal().collectAsState()
+    SliderItem(
+        value = pagerMarginHorizontal,
+        valueRange = 0..25,
+        label = stringResource(SYMR.strings.horizontal_margin),
+        valueString = "${pagerMarginHorizontal}px",
+        onChange = { screenModel.preferences.pagerMarginHorizontal().set(it) },
+        pillColor = MaterialTheme.colorScheme.surfaceContainerHighest,
+    )
+
+    val pagerMarginVertical by screenModel.preferences.pagerMarginVertical().collectAsState()
+    SliderItem(
+        value = pagerMarginVertical,
+        valueRange = 0..25,
+        label = stringResource(SYMR.strings.vertical_margin),
+        valueString = "${pagerMarginVertical}px",
+        onChange = { screenModel.preferences.pagerMarginVertical().set(it) },
+        pillColor = MaterialTheme.colorScheme.surfaceContainerHighest,
+    )
+
+    val pagerMarginColor by screenModel.preferences.pagerMarginColor().collectAsState()
+    SettingsChipRow(SYMR.strings.margin_color) {
+        ReaderPreferences.MarginColors.mapIndexed { index, it ->
+            FilterChip(
+                selected = pagerMarginColor == index,
+                onClick = { screenModel.preferences.pagerMarginColor().set(index) },
+                label = { Text(stringResource(it)) },
+            )
+        }
+    }
     // SY <--
 }
 

@@ -242,6 +242,50 @@ object ImageUtil {
         result.compress(Bitmap.CompressFormat.JPEG, 100, output.outputStream())
         return output
     }
+
+    /**
+     * Add margins around an image with specified color.
+     *
+     * @param imageSource The source image
+     * @param horizontalMargin Horizontal margin in pixels (applied to both left and right)
+     * @param verticalMargin Vertical margin in pixels (applied to both top and bottom)
+     * @param marginColor The color of the margins (ARGB format)
+     * @return New image with margins
+     */
+    fun addImageMargins(
+        imageSource: BufferedSource,
+        horizontalMargin: Int,
+        verticalMargin: Int,
+        marginColor: Int,
+    ): BufferedSource {
+        if (horizontalMargin == 0 && verticalMargin == 0) {
+            return imageSource
+        }
+
+        val imageBitmap = ImageDecoder.newInstance(imageSource.inputStream())?.decode()
+            ?: return imageSource
+
+        val originalWidth = imageBitmap.width
+        val originalHeight = imageBitmap.height
+        val newWidth = originalWidth + horizontalMargin * 2
+        val newHeight = originalHeight + verticalMargin * 2
+
+        val result = createBitmap(newWidth, newHeight)
+        result.eraseColor(marginColor)
+
+        result.applyCanvas {
+            drawBitmap(
+                imageBitmap,
+                Rect(0, 0, originalWidth, originalHeight),
+                Rect(horizontalMargin, verticalMargin, horizontalMargin + originalWidth, verticalMargin + originalHeight),
+                null
+            )
+        }
+
+        val output = Buffer()
+        result.compress(Bitmap.CompressFormat.JPEG, 100, output.outputStream())
+        return output
+    }
     // SY <--
 
     /**

@@ -223,25 +223,53 @@ class PagerPageHolder(
 
     private fun process(page: ReaderPage, imageSource: BufferedSource): BufferedSource {
         if (viewer.config.dualPageRotateToFit) {
-            return rotateDualPage(imageSource)
+            return applyMarginsIfNeeded(rotateDualPage(imageSource))
         }
 
         if (!viewer.config.dualPageSplit) {
-            return imageSource
+            return applyMarginsIfNeeded(imageSource)
         }
 
         if (page is InsertPage) {
-            return splitInHalf(imageSource)
+            return applyMarginsIfNeeded(splitInHalf(imageSource))
         }
 
         val isDoublePage = ImageUtil.isWideImage(imageSource)
         if (!isDoublePage) {
-            return imageSource
+            return applyMarginsIfNeeded(imageSource)
         }
 
         onPageSplit(page)
 
-        return splitInHalf(imageSource)
+        return applyMarginsIfNeeded(splitInHalf(imageSource))
+    }
+
+    private fun applyMarginsIfNeeded(imageSource: BufferedSource): BufferedSource {
+        val config = viewer.config
+        if (config.pagerMarginHorizontal == 0 && config.pagerMarginVertical == 0) {
+            return imageSource
+        }
+
+        // Don't apply margins to animated images
+        if (ImageUtil.isAnimatedAndSupported(imageSource)) {
+            return imageSource
+        }
+
+        // Convert color index to actual ARGB color
+        val marginColor = when (config.pagerMarginColor) {
+            0 -> config.pageCanvasColor // Background color
+            1 -> 0xFFFFFFFF.toInt() // White
+            2 -> 0xFF000000.toInt() // Black
+            3 -> 0x00000000         // Transparent
+            else -> config.pageCanvasColor // Default to theme-based
+        }
+
+        return ImageUtil.addImageMargins(
+            imageSource = imageSource,
+            horizontalMargin = config.pagerMarginHorizontal,
+            verticalMargin = config.pagerMarginVertical,
+            marginColor = marginColor,
+        )
     }
 
     private fun rotateDualPage(imageSource: BufferedSource): BufferedSource {
@@ -257,19 +285,19 @@ class PagerPageHolder(
     private fun mergePages(imageSource: BufferedSource, imageSource2: BufferedSource?): BufferedSource {
         // Handle adding a center margin to wide images if requested
         if (imageSource2 == null) {
-            return handleWideImage(imageSource)
+            return applyMarginsIfNeeded(handleWideImage(imageSource))
         }
 
-        if (page.fullPage) return imageSource
+        if (page.fullPage) return applyMarginsIfNeeded(imageSource)
         if (ImageUtil.isAnimatedAndSupported(imageSource)) {
             page.fullPage = true
             splitDoublePages()
-            return imageSource
+            return applyMarginsIfNeeded(imageSource)
         } else if (ImageUtil.isAnimatedAndSupported(imageSource2)) {
             page.isolatedPage = true
             extraPage?.fullPage = true
             splitDoublePages()
-            return imageSource
+            return applyMarginsIfNeeded(imageSource)
         }
 
         val imageBitmap = decodeImage(imageSource)
@@ -278,7 +306,7 @@ class PagerPageHolder(
             page.fullPage = true
             splitDoublePages()
             logcat(LogPriority.ERROR) { "Cannot combine pages" }
-            return imageSource
+            return applyMarginsIfNeeded(imageSource)
         }
 
         scope.launch { progressIndicator?.setProgress(96) }
@@ -286,7 +314,7 @@ class PagerPageHolder(
             imageSource2.close()
             page.fullPage = true
             splitDoublePages()
-            return imageSource
+            return applyMarginsIfNeeded(imageSource)
         }
 
         val imageBitmap2 = decodeImage(imageSource2)
@@ -296,7 +324,7 @@ class PagerPageHolder(
             page.isolatedPage = true
             splitDoublePages()
             logcat(LogPriority.ERROR) { "Cannot combine pages" }
-            return imageSource
+            return applyMarginsIfNeeded(imageSource)
         }
 
         scope.launch { progressIndicator?.setProgress(97) }
@@ -305,7 +333,7 @@ class PagerPageHolder(
             extraPage?.fullPage = true
             page.isolatedPage = true
             splitDoublePages()
-            return imageSource
+            return applyMarginsIfNeeded(imageSource)
         }
 
         val isLTR = (viewer !is R2LPagerViewer) xor viewer.config.invertDoublePages
@@ -314,9 +342,10 @@ class PagerPageHolder(
         imageSource.close()
         imageSource2.close()
 
-        return ImageUtil.mergeBitmaps(imageBitmap, imageBitmap2, isLTR, centerMargin, viewer.config.pageCanvasColor) {
+        val mergedSource = ImageUtil.mergeBitmaps(imageBitmap, imageBitmap2, isLTR, centerMargin, viewer.config.pageCanvasColor) {
             updateProgress(it)
         }
+        return applyMarginsIfNeeded(mergedSource)
     }
 
     private fun handleWideImage(imageSource: BufferedSource): BufferedSource {

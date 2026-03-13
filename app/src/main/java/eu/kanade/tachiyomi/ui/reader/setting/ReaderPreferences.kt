@@ -184,6 +184,11 @@ class ReaderPreferences(
     fun centerMarginType() = preferenceStore.getInt("center_margin_type", PagerConfig.CenterMarginType.NONE)
 
     fun archiveReaderMode() = preferenceStore.getInt("archive_reader_mode", ArchiveReaderMode.LOAD_FROM_FILE)
+
+    // Image margins
+    fun pagerMarginHorizontal() = preferenceStore.getInt("pager_margin_horizontal", 0)
+    fun pagerMarginVertical() = preferenceStore.getInt("pager_margin_vertical", 0)
+    fun pagerMarginColor() = preferenceStore.getInt("pager_margin_color", 0)
     // SY <--
 
     enum class FlashColor {
@@ -284,6 +289,14 @@ class ReaderPreferences(
             SYMR.strings.archive_mode_load_from_file,
             SYMR.strings.archive_mode_load_into_memory,
             SYMR.strings.archive_mode_cache_to_disk,
+        )
+
+        // Margin color options
+        val MarginColors = listOf(
+            SYMR.strings.margin_color_background,
+            SYMR.strings.margin_color_white,
+            SYMR.strings.margin_color_black,
+            SYMR.strings.margin_color_transparent,
         )
         // SY <--
     }

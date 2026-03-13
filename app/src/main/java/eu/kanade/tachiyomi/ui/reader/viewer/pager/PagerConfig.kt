@@ -75,6 +75,14 @@ class PagerConfig(
 
     var centerMarginType = CenterMarginType.NONE
 
+    // Image margins
+    var pagerMarginHorizontal = 0
+        private set
+    var pagerMarginVertical = 0
+        private set
+    var pagerMarginColor = 0
+        private set
+
     // SY <--
 
     init {
@@ -171,6 +179,14 @@ class PagerConfig(
 
         readerPreferences.invertDoublePages()
             .register({ invertDoublePages = it && dualPageSplit == false }, { imagePropertyChangedListener?.invoke() })
+
+        // Image margin preferences
+        readerPreferences.pagerMarginHorizontal()
+            .register({ pagerMarginHorizontal = it }, { imagePropertyChangedListener?.invoke() })
+        readerPreferences.pagerMarginVertical()
+            .register({ pagerMarginVertical = it }, { imagePropertyChangedListener?.invoke() })
+        readerPreferences.pagerMarginColor()
+            .register({ pagerMarginColor = it }, { imagePropertyChangedListener?.invoke() })
         // SY <--
     }
 

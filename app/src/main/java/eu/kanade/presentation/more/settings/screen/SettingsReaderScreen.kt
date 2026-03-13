@@ -233,11 +233,15 @@ object SettingsReaderScreen : SearchableSettings {
         val imageScaleTypePref = readerPreferences.imageScaleType()
         val dualPageSplitPref = readerPreferences.dualPageSplitPaged()
         val rotateToFitPref = readerPreferences.dualPageRotateToFit()
+        val pagerMarginHorizontalPref = readerPreferences.pagerMarginHorizontal()
+        val pagerMarginVerticalPref = readerPreferences.pagerMarginVertical()
 
         val navMode by navModePref.collectAsState()
         val imageScaleType by imageScaleTypePref.collectAsState()
         val dualPageSplit by dualPageSplitPref.collectAsState()
         val rotateToFit by rotateToFitPref.collectAsState()
+        val pagerMarginHorizontal by pagerMarginHorizontalPref.collectAsState()
+        val pagerMarginVertical by pagerMarginVerticalPref.collectAsState()
 
         return Preference.PreferenceGroup(
             title = stringResource(MR.strings.pager_viewer),
@@ -326,6 +330,30 @@ object SettingsReaderScreen : SearchableSettings {
                     title = stringResource(MR.strings.pref_page_rotate_invert),
                     enabled = rotateToFit,
                 ),
+                // SY -->
+                Preference.PreferenceItem.SliderPreference(
+                    value = pagerMarginHorizontal,
+                    valueRange = 0..25,
+                    title = stringResource(SYMR.strings.horizontal_margin),
+                    valueString = "${pagerMarginHorizontal}px",
+                    onValueChanged = { readerPreferences.pagerMarginHorizontal().set(it) },
+                ),
+                Preference.PreferenceItem.SliderPreference(
+                    value = pagerMarginVertical,
+                    valueRange = 0..25,
+                    title = stringResource(SYMR.strings.vertical_margin),
+                    valueString = "${pagerMarginVertical}px",
+                    onValueChanged = { readerPreferences.pagerMarginVertical().set(it) },
+                ),
+                Preference.PreferenceItem.ListPreference(
+                    preference = readerPreferences.pagerMarginColor(),
+                    entries = ReaderPreferences.MarginColors
+                        .mapIndexed { index, it -> index to stringResource(it) }
+                        .toMap()
+                        .toImmutableMap(),
+                    title = stringResource(SYMR.strings.margin_color),
+                ),
+                // SY <--
             ),
         )
     }
