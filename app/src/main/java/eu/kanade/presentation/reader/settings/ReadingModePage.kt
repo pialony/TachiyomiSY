@@ -178,7 +178,7 @@ private fun ColumnScope.PagerViewerSettings(screenModel: ReaderSettingsScreenMod
     val pagerMarginHorizontal by screenModel.preferences.pagerMarginHorizontal().collectAsState()
     SliderItem(
         value = pagerMarginHorizontal,
-        valueRange = 0..25,
+        valueRange = ReaderPreferences.PAGER_MARGIN_MIN..ReaderPreferences.PAGER_MARGIN_MAX,
         label = stringResource(SYMR.strings.horizontal_margin),
         valueString = "${pagerMarginHorizontal}px",
         onChange = { screenModel.preferences.pagerMarginHorizontal().set(it) },
@@ -188,7 +188,7 @@ private fun ColumnScope.PagerViewerSettings(screenModel: ReaderSettingsScreenMod
     val pagerMarginVertical by screenModel.preferences.pagerMarginVertical().collectAsState()
     SliderItem(
         value = pagerMarginVertical,
-        valueRange = 0..25,
+        valueRange = ReaderPreferences.PAGER_MARGIN_MIN..ReaderPreferences.PAGER_MARGIN_MAX,
         label = stringResource(SYMR.strings.vertical_margin),
         valueString = "${pagerMarginVertical}px",
         onChange = { screenModel.preferences.pagerMarginVertical().set(it) },

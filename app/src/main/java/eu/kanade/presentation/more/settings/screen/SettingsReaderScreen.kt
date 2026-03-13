@@ -102,6 +102,7 @@ object SettingsReaderScreen : SearchableSettings {
             // SY -->
             getPageDownloadingGroup(readerPreferences = readerPref),
             getForkSettingsGroup(readerPreferences = readerPref),
+            getPagedMarginsGroup(readerPreferences = readerPref),
             // SY <--
         )
     }
@@ -330,30 +331,6 @@ object SettingsReaderScreen : SearchableSettings {
                     title = stringResource(MR.strings.pref_page_rotate_invert),
                     enabled = rotateToFit,
                 ),
-                // SY -->
-                Preference.PreferenceItem.SliderPreference(
-                    value = pagerMarginHorizontal,
-                    valueRange = 0..25,
-                    title = stringResource(SYMR.strings.horizontal_margin),
-                    valueString = "${pagerMarginHorizontal}px",
-                    onValueChanged = { readerPreferences.pagerMarginHorizontal().set(it) },
-                ),
-                Preference.PreferenceItem.SliderPreference(
-                    value = pagerMarginVertical,
-                    valueRange = 0..25,
-                    title = stringResource(SYMR.strings.vertical_margin),
-                    valueString = "${pagerMarginVertical}px",
-                    onValueChanged = { readerPreferences.pagerMarginVertical().set(it) },
-                ),
-                Preference.PreferenceItem.ListPreference(
-                    preference = readerPreferences.pagerMarginColor(),
-                    entries = ReaderPreferences.MarginColors
-                        .mapIndexed { index, it -> index to stringResource(it) }
-                        .toMap()
-                        .toImmutableMap(),
-                    title = stringResource(SYMR.strings.margin_color),
-                ),
-                // SY <--
             ),
         )
     }
@@ -640,6 +617,40 @@ object SettingsReaderScreen : SearchableSettings {
                         .mapIndexed { index, it -> index to stringResource(it) }
                         .toMap()
                         .toImmutableMap(),
+                ),
+            ),
+        )
+    }
+
+    @Composable
+    private fun getPagedMarginsGroup(readerPreferences: ReaderPreferences): Preference.PreferenceGroup {
+        val pagerMarginHorizontal by readerPreferences.pagerMarginHorizontal().collectAsState()
+        val pagerMarginVertical by readerPreferences.pagerMarginVertical().collectAsState()
+        
+        return Preference.PreferenceGroup(
+            title = stringResource(SYMR.strings.pager_margins),
+            preferenceItems = persistentListOf(
+                Preference.PreferenceItem.SliderPreference(
+                    value = pagerMarginHorizontal,
+                    valueRange = ReaderPreferences.PAGER_MARGIN_MIN..ReaderPreferences.PAGER_MARGIN_MAX,
+                    title = stringResource(SYMR.strings.horizontal_margin),
+                    valueString = "${pagerMarginHorizontal}px",
+                    onValueChanged = { readerPreferences.pagerMarginHorizontal().set(it) },
+                ),
+                Preference.PreferenceItem.SliderPreference(
+                    value = pagerMarginVertical,
+                    valueRange = ReaderPreferences.PAGER_MARGIN_MIN..ReaderPreferences.PAGER_MARGIN_MAX,
+                    title = stringResource(SYMR.strings.vertical_margin),
+                    valueString = "${pagerMarginVertical}px",
+                    onValueChanged = { readerPreferences.pagerMarginVertical().set(it) },
+                ),
+                Preference.PreferenceItem.ListPreference(
+                    preference = readerPreferences.pagerMarginColor(),
+                    entries = ReaderPreferences.MarginColors
+                        .mapIndexed { index, it -> index to stringResource(it) }
+                        .toMap()
+                        .toImmutableMap(),
+                    title = stringResource(SYMR.strings.margin_color),
                 ),
             ),
         )

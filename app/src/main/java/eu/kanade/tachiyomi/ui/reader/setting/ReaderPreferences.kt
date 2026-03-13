@@ -225,6 +225,11 @@ class ReaderPreferences(
         const val WEBTOON_PADDING_MIN = 0
         const val WEBTOON_PADDING_MAX = 25
 
+        // SY -->
+        const val PAGER_MARGIN_MIN = 0
+        const val PAGER_MARGIN_MAX = 25
+        // SY <--
+
         const val MILLI_CONVERSION = 100
 
         val TapZones = listOf(

@@ -749,16 +749,16 @@
     <string name="image_margins">Image Margins</string>
     <string name="image_margins_summary">Add space around images to prevent cropping on edge-to-edge displays</string>
     
-    <string name="pager_margins">Margins</string>
+    <string name="pager_margins">Paged Reader Margins</string>
     
     <string name="horizontal_margin">Horizontal margin</string>
     <string name="vertical_margin">Vertical margin</string>
     <string name="margin_color">Margin color</string>
     
+    <string name="margin_color_background">Background color</string>
     <string name="margin_color_white">White</string>
     <string name="margin_color_black">Black</string>
     <string name="margin_color_transparent">Transparent</string>
-    <string name="margin_color_background">Background color</string>
     
     <string name="pixels">px</string>
     <string name="margin_pixels_summary">%1$d pixels</string>
