@@ -246,7 +246,8 @@ class PagerPageHolder(
 
     private fun applyMarginsIfNeeded(imageSource: BufferedSource): BufferedSource {
         val config = viewer.config
-        if (config.pagerMarginHorizontal == 0 && config.pagerMarginVertical == 0) {
+        if (config.pagerMarginTop == 0 && config.pagerMarginBottom == 0 &&
+            config.pagerMarginLeft == 0 && config.pagerMarginRight == 0) {
             return imageSource
         }
 
@@ -266,8 +267,10 @@ class PagerPageHolder(
 
         return ImageUtil.addImageMargins(
             imageSource = imageSource,
-            horizontalMargin = config.pagerMarginHorizontal,
-            verticalMargin = config.pagerMarginVertical,
+            marginTop = config.pagerMarginTop,
+            marginBottom = config.pagerMarginBottom,
+            marginLeft = config.pagerMarginLeft,
+            marginRight = config.pagerMarginRight,
             marginColor = marginColor,
         )
     }

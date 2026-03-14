@@ -753,6 +753,10 @@
     
     <string name="horizontal_margin">Horizontal margin</string>
     <string name="vertical_margin">Vertical margin</string>
+    <string name="top_margin">Top margin</string>
+    <string name="bottom_margin">Bottom margin</string>
+    <string name="left_margin">Left margin</string>
+    <string name="right_margin">Right margin</string>
     <string name="margin_color">Margin color</string>
     
     <string name="margin_color_background">Background color</string>

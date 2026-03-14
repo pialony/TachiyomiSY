@@ -258,7 +258,36 @@ object ImageUtil {
         verticalMargin: Int,
         marginColor: Int,
     ): BufferedSource {
-        if (horizontalMargin == 0 && verticalMargin == 0) {
+        return addImageMargins(
+            imageSource = imageSource,
+            marginTop = verticalMargin,
+            marginBottom = verticalMargin,
+            marginLeft = horizontalMargin,
+            marginRight = horizontalMargin,
+            marginColor = marginColor,
+        )
+    }
+
+    /**
+     * Add individual margins around an image with specified color.
+     *
+     * @param imageSource The source image
+     * @param marginTop Top margin in pixels
+     * @param marginBottom Bottom margin in pixels
+     * @param marginLeft Left margin in pixels
+     * @param marginRight Right margin in pixels
+     * @param marginColor The color of the margins (ARGB format)
+     * @return New image with margins
+     */
+    fun addImageMargins(
+        imageSource: BufferedSource,
+        marginTop: Int,
+        marginBottom: Int,
+        marginLeft: Int,
+        marginRight: Int,
+        marginColor: Int,
+    ): BufferedSource {
+        if (marginTop == 0 && marginBottom == 0 && marginLeft == 0 && marginRight == 0) {
             return imageSource
         }
 
@@ -267,8 +296,8 @@ object ImageUtil {
 
         val originalWidth = imageBitmap.width
         val originalHeight = imageBitmap.height
-        val newWidth = originalWidth + horizontalMargin * 2
-        val newHeight = originalHeight + verticalMargin * 2
+        val newWidth = originalWidth + marginLeft + marginRight
+        val newHeight = originalHeight + marginTop + marginBottom
 
         val result = createBitmap(newWidth, newHeight)
         result.eraseColor(marginColor)
@@ -277,7 +306,7 @@ object ImageUtil {
             drawBitmap(
                 imageBitmap,
                 Rect(0, 0, originalWidth, originalHeight),
-                Rect(horizontalMargin, verticalMargin, horizontalMargin + originalWidth, verticalMargin + originalHeight),
+                Rect(marginLeft, marginTop, marginLeft + originalWidth, marginTop + originalHeight),
                 null
             )
         }

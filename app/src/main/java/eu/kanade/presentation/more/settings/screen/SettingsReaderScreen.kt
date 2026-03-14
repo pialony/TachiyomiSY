@@ -234,15 +234,11 @@ object SettingsReaderScreen : SearchableSettings {
         val imageScaleTypePref = readerPreferences.imageScaleType()
         val dualPageSplitPref = readerPreferences.dualPageSplitPaged()
         val rotateToFitPref = readerPreferences.dualPageRotateToFit()
-        val pagerMarginHorizontalPref = readerPreferences.pagerMarginHorizontal()
-        val pagerMarginVerticalPref = readerPreferences.pagerMarginVertical()
 
         val navMode by navModePref.collectAsState()
         val imageScaleType by imageScaleTypePref.collectAsState()
         val dualPageSplit by dualPageSplitPref.collectAsState()
         val rotateToFit by rotateToFitPref.collectAsState()
-        val pagerMarginHorizontal by pagerMarginHorizontalPref.collectAsState()
-        val pagerMarginVertical by pagerMarginVerticalPref.collectAsState()
 
         return Preference.PreferenceGroup(
             title = stringResource(MR.strings.pager_viewer),
@@ -624,25 +620,41 @@ object SettingsReaderScreen : SearchableSettings {
 
     @Composable
     private fun getPagedMarginsGroup(readerPreferences: ReaderPreferences): Preference.PreferenceGroup {
-        val pagerMarginHorizontal by readerPreferences.pagerMarginHorizontal().collectAsState()
-        val pagerMarginVertical by readerPreferences.pagerMarginVertical().collectAsState()
+        val pagerMarginTop by readerPreferences.pagerMarginTop().collectAsState()
+        val pagerMarginBottom by readerPreferences.pagerMarginBottom().collectAsState()
+        val pagerMarginLeft by readerPreferences.pagerMarginLeft().collectAsState()
+        val pagerMarginRight by readerPreferences.pagerMarginRight().collectAsState()
         
         return Preference.PreferenceGroup(
             title = stringResource(SYMR.strings.pager_margins),
             preferenceItems = persistentListOf(
                 Preference.PreferenceItem.SliderPreference(
-                    value = pagerMarginHorizontal,
+                    value = pagerMarginTop,
                     valueRange = ReaderPreferences.PAGER_MARGIN_MIN..ReaderPreferences.PAGER_MARGIN_MAX,
-                    title = stringResource(SYMR.strings.horizontal_margin),
-                    valueString = "${pagerMarginHorizontal}px",
-                    onValueChanged = { readerPreferences.pagerMarginHorizontal().set(it) },
+                    title = stringResource(SYMR.strings.top_margin),
+                    valueString = "${pagerMarginTop}px",
+                    onValueChanged = { readerPreferences.pagerMarginTop().set(it) },
                 ),
                 Preference.PreferenceItem.SliderPreference(
-                    value = pagerMarginVertical,
+                    value = pagerMarginBottom,
                     valueRange = ReaderPreferences.PAGER_MARGIN_MIN..ReaderPreferences.PAGER_MARGIN_MAX,
-                    title = stringResource(SYMR.strings.vertical_margin),
-                    valueString = "${pagerMarginVertical}px",
-                    onValueChanged = { readerPreferences.pagerMarginVertical().set(it) },
+                    title = stringResource(SYMR.strings.bottom_margin),
+                    valueString = "${pagerMarginBottom}px",
+                    onValueChanged = { readerPreferences.pagerMarginBottom().set(it) },
+                ),
+                Preference.PreferenceItem.SliderPreference(
+                    value = pagerMarginLeft,
+                    valueRange = ReaderPreferences.PAGER_MARGIN_MIN..ReaderPreferences.PAGER_MARGIN_MAX,
+                    title = stringResource(SYMR.strings.left_margin),
+                    valueString = "${pagerMarginLeft}px",
+                    onValueChanged = { readerPreferences.pagerMarginLeft().set(it) },
+                ),
+                Preference.PreferenceItem.SliderPreference(
+                    value = pagerMarginRight,
+                    valueRange = ReaderPreferences.PAGER_MARGIN_MIN..ReaderPreferences.PAGER_MARGIN_MAX,
+                    title = stringResource(SYMR.strings.right_margin),
+                    valueString = "${pagerMarginRight}px",
+                    onValueChanged = { readerPreferences.pagerMarginRight().set(it) },
                 ),
                 Preference.PreferenceItem.ListPreference(
                     preference = readerPreferences.pagerMarginColor(),

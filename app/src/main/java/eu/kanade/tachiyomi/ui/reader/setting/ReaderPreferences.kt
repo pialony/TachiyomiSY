@@ -186,8 +186,10 @@ class ReaderPreferences(
     fun archiveReaderMode() = preferenceStore.getInt("archive_reader_mode", ArchiveReaderMode.LOAD_FROM_FILE)
 
     // Image margins
-    fun pagerMarginHorizontal() = preferenceStore.getInt("pager_margin_horizontal", 0)
-    fun pagerMarginVertical() = preferenceStore.getInt("pager_margin_vertical", 0)
+    fun pagerMarginTop() = preferenceStore.getInt("pager_margin_top", 0)
+    fun pagerMarginBottom() = preferenceStore.getInt("pager_margin_bottom", 0)
+    fun pagerMarginLeft() = preferenceStore.getInt("pager_margin_left", 0)
+    fun pagerMarginRight() = preferenceStore.getInt("pager_margin_right", 0)
     fun pagerMarginColor() = preferenceStore.getInt("pager_margin_color", 0)
     // SY <--
 

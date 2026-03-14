@@ -175,23 +175,43 @@ private fun ColumnScope.PagerViewerSettings(screenModel: ReaderSettingsScreenMod
     }
 
     // Image margins
-    val pagerMarginHorizontal by screenModel.preferences.pagerMarginHorizontal().collectAsState()
+    val pagerMarginTop by screenModel.preferences.pagerMarginTop().collectAsState()
     SliderItem(
-        value = pagerMarginHorizontal,
+        value = pagerMarginTop,
         valueRange = ReaderPreferences.PAGER_MARGIN_MIN..ReaderPreferences.PAGER_MARGIN_MAX,
-        label = stringResource(SYMR.strings.horizontal_margin),
-        valueString = "${pagerMarginHorizontal}px",
-        onChange = { screenModel.preferences.pagerMarginHorizontal().set(it) },
+        label = stringResource(SYMR.strings.top_margin),
+        valueString = "${pagerMarginTop}px",
+        onChange = { screenModel.preferences.pagerMarginTop().set(it) },
         pillColor = MaterialTheme.colorScheme.surfaceContainerHighest,
     )
 
-    val pagerMarginVertical by screenModel.preferences.pagerMarginVertical().collectAsState()
+    val pagerMarginBottom by screenModel.preferences.pagerMarginBottom().collectAsState()
     SliderItem(
-        value = pagerMarginVertical,
+        value = pagerMarginBottom,
         valueRange = ReaderPreferences.PAGER_MARGIN_MIN..ReaderPreferences.PAGER_MARGIN_MAX,
-        label = stringResource(SYMR.strings.vertical_margin),
-        valueString = "${pagerMarginVertical}px",
-        onChange = { screenModel.preferences.pagerMarginVertical().set(it) },
+        label = stringResource(SYMR.strings.bottom_margin),
+        valueString = "${pagerMarginBottom}px",
+        onChange = { screenModel.preferences.pagerMarginBottom().set(it) },
+        pillColor = MaterialTheme.colorScheme.surfaceContainerHighest,
+    )
+
+    val pagerMarginLeft by screenModel.preferences.pagerMarginLeft().collectAsState()
+    SliderItem(
+        value = pagerMarginLeft,
+        valueRange = ReaderPreferences.PAGER_MARGIN_MIN..ReaderPreferences.PAGER_MARGIN_MAX,
+        label = stringResource(SYMR.strings.left_margin),
+        valueString = "${pagerMarginLeft}px",
+        onChange = { screenModel.preferences.pagerMarginLeft().set(it) },
+        pillColor = MaterialTheme.colorScheme.surfaceContainerHighest,
+    )
+
+    val pagerMarginRight by screenModel.preferences.pagerMarginRight().collectAsState()
+    SliderItem(
+        value = pagerMarginRight,
+        valueRange = ReaderPreferences.PAGER_MARGIN_MIN..ReaderPreferences.PAGER_MARGIN_MAX,
+        label = stringResource(SYMR.strings.right_margin),
+        valueString = "${pagerMarginRight}px",
+        onChange = { screenModel.preferences.pagerMarginRight().set(it) },
         pillColor = MaterialTheme.colorScheme.surfaceContainerHighest,
     )
 
